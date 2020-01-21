@@ -1,0 +1,10 @@
+{% include 'header.html' %}
+<div class="container">
+    <div class="fullscreen">
+        <img id="camera" src="{{ url_for('delaystream', delay=delay) }}" alt="videostream">
+    </div>
+</div>
+
+<script src="{{ url_for('static',filename='js/menu.js') }}"></script>
+
+{% include 'footer.html' %}

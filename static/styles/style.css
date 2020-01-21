@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap');
+* {
+    margin: 0;
+    /* padding: 0; */
+    box-sizing: border-box;
+}
+
+body {
+    /* font-family: Arial; */
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+}
+
+.container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+
+.lists {
+    /* width: 800px;
+    margin: 0 auto;
+    text-align: left; */
+}
+
+
+.multiple {
+
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+}
+.multiple > img {
+
+    /* flex: 0 50%;
+    box-sizing:border-box; */
+    margin-bottom: 1%;
+    width: 49.5%;
+    height: 49.5%;
+
+}
+.fullscreen {
+    /* width: 100%;
+    height: 100%; */
+
+    /* justify-content: space-between; */
+}
+
+.fourcams {
+    
+}
+
+.fullscreen > img {
+    width: 100%;
+    height: 100%;
+}
