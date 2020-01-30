@@ -1,12 +1,15 @@
-@import url('https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap');
+@font-face {
+    font-family: 'Press Start 2P';
+    src:
+        local('PressStart2P-Regular'),
+        url('PressStart2P-Regular.ttf');
+}
 * {
     margin: 0;
-    /* padding: 0; */
     box-sizing: border-box;
 }
 
 body {
-    /* font-family: Arial; */
     position:absolute;
     top:0;
     left:0;
@@ -56,7 +59,7 @@ body {
 }
 
 .fourcams {
-    
+
 }
 
 .fullscreen > img {

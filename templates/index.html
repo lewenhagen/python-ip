@@ -1,26 +1,11 @@
 {% include 'header.html' %}
 
+{% if menu == 1 %}
+    {% include 'menu1.html' %}
+{% elif menu == 2 %}
+    {% include 'menu2.html' %}
+{% elif menu == 3 %}
+    {% include 'menu3.html' %}
+{% endif %}
 
-<div class="nes-container is-rounded" style="width: 50%; margin: 0 auto;margin-top: 10%">
-
-    <div class="lists">
-        <h1>Vad vill du göra?</h1>
-        <ul class="nes-list is-circle">
-            <h4>Tillgängliga kameror:</h4>
-            {% for item in data %}
-            <li>#{{ item.nr }} {{ item.ip }}
-                {% endfor %}
-                <li>------------------------------</li>
-                <li>5: Den här menyn</li>
-                <li>7: Sätt delay</li>
-                <li>8: Spela in (TBD)</li>
-                <li>9: Surprise!!</li>
-                <li>?: Avsluta inspelning (TBD)</li>
-                <li>0: Visa alla kameror (TBD)</li>
-            </ul>
-
-        </div>
-</div>
-
-<script src="{{ url_for('static',filename='js/menu.js') }}"></script>
 {% include 'footer.html' %}

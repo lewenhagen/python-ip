@@ -15,15 +15,21 @@ import functions as func
 
 frames = []
 counter = 0
-
+data = {
+    "selected_cam": 0,
+    "selected_option": -1,
+    "camera_object": ""
+}
 
 list_of_cameras = [
-    "http://192.168.1.133"
+    "http://192.168.1.133",
+    "http://192.168.1.129"
+
 ]
 
 list_of_cam_objects = func.create_list_of_cam_objects(list_of_cameras)
 
-thecam = VideoCamera(list_of_cam_objects[0].fulladress)
+thecam = VideoCamera(list_of_cam_objects[data["selected_cam"]-1].fulladress)
 thecam2 = VideoCamera(list_of_cam_objects[0].fulladress)
 thecam3 = VideoCamera(list_of_cam_objects[0].fulladress)
 thecam4 = VideoCamera(list_of_cam_objects[0].fulladress)
@@ -45,14 +51,15 @@ def set_current_cam4(cam):
     thecam4 = VideoCamera(list_of_cam_objects[int(cam)-1].fulladress)
 
 def gen(delay):
-    global thecam
+    # global thecam
     global frames
-    set_current_cam(0)
+    global data
+    # set_current_cam(data["selected_cam"]-1)
     # global counter
     counter = 0
     frames = []
     while True:
-        frames.append(thecam.get_frame())
+        frames.append(data["camera_object"].get_frame())
         counter+=1
         if len(frames) >= (int(delay)*25):
             yield (b'--frame\r\n'
@@ -135,12 +142,30 @@ def main():
         # global thecam
         frames = []
         # del thecam
-    return render_template("index.html", data=list_of_cam_objects, cams=list_of_cameras)
+    return render_template("index.html", data=list_of_cam_objects, cams=list_of_cameras, menu=1)
 
 @app.route("/selectbox")
 def selectbox():
     """ select middle route """
     return render_template("selectbox.html")
+
+
+@app.route("/choosecam/", defaults={'cam_nr': 0})
+@app.route("/choosecam/<int:cam_nr>")
+def choosecam(cam_nr):
+    """ choose cam middle route """
+    global data
+    print("Cam number: {}".format(cam_nr))
+
+    if cam_nr > 0:
+        data["selected_cam"] = cam_nr
+        data["camera_object"] = VideoCamera(list_of_cam_objects[cam_nr-1].fulladress)
+        return render_template("index.html", data=list_of_cam_objects, menu=3)
+
+    # option = int(request.args.get("option"))
+
+    return render_template("index.html", data=list_of_cam_objects, menu=2)
+
 
 
 
@@ -163,13 +188,14 @@ def delaystream4(delay):
 
 @app.route('/stream', methods=['GET'])
 def stream():
+    global data
     # print(request.form)
     delay = int(request.args.get("delay"))
     temp_delay = -1
     if temp_delay != delay:
         temp_delay = delay
     if delay == 0:
-        return render_template("one_cam.html", data=list_of_cam_objects[0].fulladress)
+        return render_template("one_cam.html", data=list_of_cam_objects[data["selected_cam"]-1].fulladress)
     else:
         print("delay: {}".format(temp_delay))
         return render_template("cam.html", delay=temp_delay)

@@ -1,0 +1,14 @@
+<div class="nes-container is-rounded" style="width: 50%; margin: 0 auto;margin-top: 10%">
+
+    <div class="lists">
+        <h1>Välj kamera:</h1>
+        <ul class="nes-list is-circle">
+            {% for cam in data %}
+            <li>#{{ cam.nr }}) {{ cam.ip }}</li>
+            {% endfor %}
+            <li>0) Huvudmenyn</li>
+        </ul>
+    </div>
+</div>
+
+<script src="{{ url_for('static',filename='js/menu2.js') }}"></script>
