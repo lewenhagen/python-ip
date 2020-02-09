@@ -13,19 +13,70 @@ import cv2 as cv
 from cam import Cam
 import functions as func
 
+list_of_cameras = [
+"http://192.168.1.133",
+"http://192.168.1.133",
+"http://192.168.1.133",
+"http://192.168.1.133"
+
+]
+
+menu = [
+    {
+        "choices": [
+            "LIVE - Singlecam",
+            "LIVE - Doublecam",
+            "DELAY - Singlecam",
+            "DELAY - Singlecam Quadview",
+            "DELAY - Doublecam"
+        ],
+        "jsmenu": "menu.js"
+    },
+    {
+        "choices": list_of_cameras,
+        "delay": False,
+        "double": False,
+        "jsmenu": "live_single.js"
+    },
+    {
+        "choices": list_of_cameras,
+        "delay": False,
+        "double": True,
+        "jsmenu": "live_double.js"
+    },
+    {
+        "choices": list_of_cameras,
+        "delay": True,
+        "double": False,
+        "jsmenu": "delay_single.js"
+    },
+    {
+        "choices": list_of_cameras,
+        "delay": True,
+        "quad": True,
+        "jsmenu": "delay_single_quad.js"
+    },
+    {
+        "choices": list_of_cameras,
+        "delay": True,
+        "double": True,
+        "jsmenu": "delay_double.js"
+    },
+]
+
+choices = {
+    "choice": "",
+    "mode": -1,
+    "cams": []
+}
+
 frames = []
 counter = 0
 data = {
     "selected_cam": 0,
-    "selected_option": -1,
-    "camera_object": ""
+    "selected_option": -1
 }
 
-list_of_cameras = [
-    "http://192.168.1.133",
-    "http://192.168.1.129"
-
-]
 
 list_of_cam_objects = func.create_list_of_cam_objects(list_of_cameras)
 
@@ -36,7 +87,9 @@ thecam4 = VideoCamera(list_of_cam_objects[0].fulladress)
 
 def set_current_cam(cam):
     global thecam
+    global data
     thecam = VideoCamera(list_of_cam_objects[int(cam)-1].fulladress)
+    data["camera_object"] = thecam
 
 def set_current_cam2(cam):
     global thecam2
@@ -133,20 +186,40 @@ def gen4(delay):
 
 app = Flask(__name__)
 
-@app.route("/")
-def main():
+@app.route("/", defaults={'menu_nr': 0})
+@app.route("/<int:menu_nr>")
+def main(menu_nr):
     """ Main route """
     global frames
+    global menu
+    global choices
+
+    # if menu_nr == 1:
+    #     choices["choice"] = menu[0]["choices"][menu_nr-1]
+    #     return render_template("choosecam.html", choices=choices, cams=list_of_cameras)
+    # elif menu_nr == 2:
+    #     choices["choice"] = menu[0]["choices"][menu_nr-1]
+    #     return render_template("choosecam.html", choices=choices, cams=list_of_cameras)
+    if menu_nr > 0:
+        choices["choice"] = menu[0]["choices"][menu_nr-1]
+        # return render_template("index.html", menu=menu[menu_nr], choices=choices)
+    else:
+        choices["choice"] = "Menu"
 
     if len(frames) > 0:
         # global thecam
         frames = []
         # del thecam
-    return render_template("index.html", data=list_of_cam_objects, cams=list_of_cameras, menu=1)
 
-@app.route("/selectbox")
-def selectbox():
+    return render_template("index.html", menu=menu[menu_nr], choices=choices)
+
+    # return render_template("index.html", data=list_of_cam_objects, cams=list_of_cameras, menu=1)
+
+@app.route("/selectbox/<int:cam>")
+def selectbox(cam):
     """ select middle route """
+    global data
+    data["selected_cam"] = cam
     return render_template("selectbox.html")
 
 
@@ -168,9 +241,20 @@ def choosecam(cam_nr):
 
 
 
+@app.route("/select-dual-cams/<int:left>/<int:right>")
+def select_dual_cam(left, right):
+    """ select_dual_cam route """
+    left = list_of_cam_objects[left-1].fulladress
+    right = list_of_cam_objects[right-1].fulladress
+
+    return render_template("dual.html", left=left, right=right)
+
+
+
 
 @app.route('/delaystream/<int:delay>')
 def delaystream(delay):
+    # set_current_cam(cam)
     return Response(gen(delay), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 @app.route('/delaystream2/<int:delay>')

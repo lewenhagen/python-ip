@@ -9,13 +9,11 @@
             case "2":
             case "3":
             case "4":
-                window.location.replace(`/selectcam/${key}`);
+                window.location.replace(`/selectbox/${key}`);
                 break;
             case "0":
                 window.location.replace("/0");
                 break;
-
         }
     })
-
 })();

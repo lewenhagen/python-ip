@@ -14,8 +14,6 @@
             case "0":
                 window.location.replace("/0");
                 break;
-
         }
     })
-
 })();

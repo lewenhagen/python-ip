@@ -10,17 +10,17 @@ def get_full_urls(item):
 
 def create_list_of_cam_objects(thelist):
     result = []
-    # for index, item in enumerate(thelist):
-    cam = thelist[0] + "/axis-cgi/mjpg/video.cgi?resolution=1280x720&compression=25&camera=1"
-    cam = Cam(thelist[0], cam, 1, 1)
+    for index, item in enumerate(thelist):
+        # cam = item + "/axis-cgi/mjpg/video.cgi?resolution=1280x720&compression=25&camera=1"
+        # cam = Cam(item, get_full_urls(item), 1, 1)
 
-        # cam = Cam(item, get_full_urls(item), (index+1), 1)
-    result.append(cam)
+        cam = Cam(item, get_full_urls(item), (index+1), 1)
+        result.append(cam)
 
-    cam = thelist[1] + "/videostream.cgi"
-    cam = Cam(thelist[1], cam, 2, 1)
+    # cam = thelist[1] + "/videostream.cgi"
+    # cam = Cam(thelist[1], cam, 2, 1)
 
-    result.append(cam)
+    # result.append(cam)
 
     return result
 

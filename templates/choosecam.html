@@ -1,0 +1,23 @@
+{% include 'header.html' %}
+<div class="nes-container is-rounded" style="width: 50%; margin: 0 auto;margin-top: 10%">
+<div class="lists">
+    <h1>{{ choices["choice"] }}</h1>
+    <ul class="nes-list">
+        {% for cam in cams %}
+            <li>{{ loop.index }}. {{ cam }} </li>
+        {% endfor %}
+        <li>0. Main menu </li>
+    </ul>
+</div>
+
+
+<!-- {% if menu == 1 %}
+    {% include 'menu1.html' %}
+{% elif menu == 2 %}
+    {% include 'menu2.html' %}
+{% elif menu == 3 %}
+    {% include 'menu3.html' %}
+{% endif %} -->
+<script src="{{ url_for('static',filename='js/choosecamMenu.js') }}"></script>
+
+{% include 'footer.html' %}

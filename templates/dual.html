@@ -1,0 +1,12 @@
+{% include 'header.html' %}
+<div class="container">
+    <div class="dual">
+        <img src="{{ left }}">
+        <img src="{{ right }}">
+
+    </div>
+</div>
+
+<script src="{{ url_for('static',filename='js/menu.js') }}"></script>
+
+{% include 'footer.html' %}

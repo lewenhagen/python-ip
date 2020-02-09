@@ -10,15 +10,14 @@
     </ul>
 </div>
 
-{% if menu.delay %}
-    <input id="delay" value="yes" hidden>
-{% endif %}
-{% if menu.double %}
-    <input id="double" value="yes" hidden>
-{% elif menu.quad %}
-    <input id="quad" value="yes" hidden>
-{% endif %}
 
-<script src="{{ url_for('static',filename='js/' + menu.jsmenu +'') }}"></script>
+<!-- {% if menu == 1 %}
+    {% include 'menu1.html' %}
+{% elif menu == 2 %}
+    {% include 'menu2.html' %}
+{% elif menu == 3 %}
+    {% include 'menu3.html' %}
+{% endif %} -->
+<script src="{{ url_for('static',filename='js/menu2.js') }}"></script>
 
 {% include 'footer.html' %}
