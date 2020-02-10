@@ -4,7 +4,7 @@ import cv2 as cv
 from cam import Cam
 
 def get_full_urls(item):
-        return item + "/axis-cgi/mjpg/video.cgi?resolution=1280x720&compression=25&camera=1"
+    return item + "/axis-cgi/mjpg/video.cgi?resolution=1280x720&compression=25&camera=1"
 
 
 

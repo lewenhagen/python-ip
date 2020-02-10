@@ -9,7 +9,9 @@
             case "2":
             case "3":
             case "4":
-                window.location.replace(`/setcam/${key}`);
+                window.location.replace(`/delta/${key}`);
+
+                // window.location.replace(`/setcam/${key}`);
                 // window.location.replace(`/selectbox/${key}`);
                 break;
             case "0":

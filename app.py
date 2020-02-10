@@ -73,8 +73,9 @@ choices = {
 frames = []
 counter = 0
 data = {
+    "nr_of_cams": 0,
     "selected_cam": 0,
-    "selected_option": -1
+    "cameras": []
 }
 
 
@@ -84,6 +85,12 @@ thecam = VideoCamera(list_of_cam_objects[data["selected_cam"]-1].fulladress)
 thecam2 = VideoCamera(list_of_cam_objects[0].fulladress)
 thecam3 = VideoCamera(list_of_cam_objects[0].fulladress)
 thecam4 = VideoCamera(list_of_cam_objects[0].fulladress)
+
+def set_cam(cam):
+    # global thecam
+    global data
+    # thecam = VideoCamera(list_of_cam_objects[int(cam)-1].fulladress)
+    data["cameras"].push(VideoCamera(list_of_cam_objects[int(cam)-1].fulladress))
 
 def set_current_cam(cam):
     global thecam
@@ -215,12 +222,41 @@ def main(menu_nr):
 
     # return render_template("index.html", data=list_of_cam_objects, cams=list_of_cameras, menu=1)
 
-@app.route("/selectbox/<int:cam>")
-def selectbox(cam):
+@app.route("/selectbox")
+def selectbox():
     """ select middle route """
-    global data
-    data["selected_cam"] = cam
+
     return render_template("selectbox.html")
+
+@app.route("/setcam/<int:cam>")
+def setcam(cam):
+    """ setcam middle route """
+    global data
+    set_current_cam(cam)
+    data["selected_cam"] = cam
+    return redirect(url_for("selectbox"))
+
+@app.route("/delta/<int:cam>")
+def delta(cam):
+    """ delta middle route """
+    global data
+    set_current_cam(cam)
+    data["selected_cam"] = cam
+    return render_template("selectdelta.html")
+
+@app.route('/quad', methods=['GET'])
+def quad():
+    global data
+    # print(request.form)
+    delay = int(request.args.get("delay"))
+    return render_template("four_cams.html", delay=delay)
+
+@app.route('/stream-dual-delay', methods=['GET'])
+def stream_dual_delay():
+    global data
+    # print(request.form)
+    delay = int(request.args.get("delay"))
+    return render_template("dual_delay.html", delay=delay)
 
 
 @app.route("/choosecam/", defaults={'cam_nr': 0})
@@ -249,8 +285,13 @@ def select_dual_cam(left, right):
 
     return render_template("dual.html", left=left, right=right)
 
+@app.route("/select-dual-cams-delay/<int:left>/<int:right>")
+def select_dual_cam_delay(left, right):
+    """ select_dual_cam_delay route """
+    left = list_of_cam_objects[left-1].fulladress
+    right = list_of_cam_objects[right-1].fulladress
 
-
+    return render_template("selectdualdelay.html", left=left, right=right)
 
 @app.route('/delaystream/<int:delay>')
 def delaystream(delay):
