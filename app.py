@@ -81,45 +81,29 @@ data = {
 
 list_of_cam_objects = func.create_list_of_cam_objects(list_of_cameras)
 
-thecam = VideoCamera(list_of_cam_objects[data["selected_cam"]-1].fulladress)
-thecam2 = VideoCamera(list_of_cam_objects[0].fulladress)
-thecam3 = VideoCamera(list_of_cam_objects[0].fulladress)
-thecam4 = VideoCamera(list_of_cam_objects[0].fulladress)
 
 def set_cam(cam):
-    # global thecam
     global data
-    # thecam = VideoCamera(list_of_cam_objects[int(cam)-1].fulladress)
-    data["cameras"].push(VideoCamera(list_of_cam_objects[int(cam)-1].fulladress))
 
-def set_current_cam(cam):
-    global thecam
+    data["cameras"].append(VideoCamera(list_of_cam_objects[int(cam)-1].fulladress))
+
+def set_quad_cam(cam):
     global data
-    thecam = VideoCamera(list_of_cam_objects[int(cam)-1].fulladress)
-    data["camera_object"] = thecam
 
-def set_current_cam2(cam):
-    global thecam2
-    thecam2 = VideoCamera(list_of_cam_objects[int(cam)-1].fulladress)
+    data["cameras"].append(VideoCamera(list_of_cam_objects[int(cam)-1].fulladress))
+    data["cameras"].append(VideoCamera(list_of_cam_objects[int(cam)-1].fulladress))
+    data["cameras"].append(VideoCamera(list_of_cam_objects[int(cam)-1].fulladress))
+    data["cameras"].append(VideoCamera(list_of_cam_objects[int(cam)-1].fulladress))
 
-def set_current_cam3(cam):
-    global thecam3
-    thecam3 = VideoCamera(list_of_cam_objects[int(cam)-1].fulladress)
-
-def set_current_cam4(cam):
-    global thecam4
-    thecam4 = VideoCamera(list_of_cam_objects[int(cam)-1].fulladress)
 
 def gen(delay):
-    # global thecam
-    global frames
+    # global frames
     global data
-    # set_current_cam(data["selected_cam"]-1)
-    # global counter
+
     counter = 0
     frames = []
     while True:
-        frames.append(data["camera_object"].get_frame())
+        frames.append(data["cameras"][0].get_frame())
         counter+=1
         if len(frames) >= (int(delay)*25):
             yield (b'--frame\r\n'
@@ -129,17 +113,16 @@ def gen(delay):
                 yield (b'--frame\r\n'
                     b'Content-Type: image/jpeg\r\n\r\n' + frames[0] + b'\r\n\r\n')
 
-    thecam.release_cam()
+    data["cameras"][0].release_cam()
 
 def gen2(delay):
-    global thecam2
-    global frames2
-    set_current_cam2(0)
-    # global counter
+    # global thecam2
+    # global frames2
+
     counter2 = 0
     frames2 = []
     while True:
-        frames2.append(thecam2.get_frame())
+        frames2.append(data["cameras"][1].get_frame())
         counter2+=1
         if len(frames2) >= (int(delay)*25):
             yield (b'--frame\r\n'
@@ -149,17 +132,16 @@ def gen2(delay):
                 yield (b'--frame\r\n'
                     b'Content-Type: image/jpeg\r\n\r\n' + frames2[0] + b'\r\n\r\n')
 
-    thecam2.release_cam()
+    data["cameras"][1].release_cam()
 
 def gen3(delay):
-    global thecam3
-    global frames3
-    set_current_cam3(0)
-    # global counter
+    # global thecam3
+    # global frames3
+
     counter3 = 0
     frames3 = []
     while True:
-        frames3.append(thecam3.get_frame())
+        frames3.append(data["cameras"][2].get_frame())
         counter3+=1
         if len(frames3) >= (int(delay)*25):
             yield (b'--frame\r\n'
@@ -169,17 +151,16 @@ def gen3(delay):
                 yield (b'--frame\r\n'
                     b'Content-Type: image/jpeg\r\n\r\n' + frames3[0] + b'\r\n\r\n')
 
-    thecam3.release_cam()
+    data["cameras"][2].release_cam()
 
 def gen4(delay):
-    global thecam4
-    global frames4
-    set_current_cam4(0)
-    # global counter
+    # global thecam4
+    # global frames4
+
     counter4 = 0
     frames4 = []
     while True:
-        frames4.append(thecam4.get_frame())
+        frames4.append(data["cameras"][3].get_frame())
         counter4+=1
         if len(frames4) >= (int(delay)*25):
             yield (b'--frame\r\n'
@@ -189,7 +170,7 @@ def gen4(delay):
                 yield (b'--frame\r\n'
                     b'Content-Type: image/jpeg\r\n\r\n' + frames4[0] + b'\r\n\r\n')
 
-    thecam4.release_cam()
+    data["cameras"][3].release_cam()
 
 app = Flask(__name__)
 
@@ -197,30 +178,23 @@ app = Flask(__name__)
 @app.route("/<int:menu_nr>")
 def main(menu_nr):
     """ Main route """
-    global frames
+    # global frames
     global menu
     global choices
 
-    # if menu_nr == 1:
-    #     choices["choice"] = menu[0]["choices"][menu_nr-1]
-    #     return render_template("choosecam.html", choices=choices, cams=list_of_cameras)
-    # elif menu_nr == 2:
-    #     choices["choice"] = menu[0]["choices"][menu_nr-1]
-    #     return render_template("choosecam.html", choices=choices, cams=list_of_cameras)
     if menu_nr > 0:
         choices["choice"] = menu[0]["choices"][menu_nr-1]
-        # return render_template("index.html", menu=menu[menu_nr], choices=choices)
+
     else:
         choices["choice"] = "Menu"
+        data["cameras"] = []
 
-    if len(frames) > 0:
-        # global thecam
-        frames = []
-        # del thecam
+    # if len(frames) > 0:
+        # frames = []
 
     return render_template("index.html", menu=menu[menu_nr], choices=choices)
 
-    # return render_template("index.html", data=list_of_cam_objects, cams=list_of_cameras, menu=1)
+
 
 @app.route("/selectbox")
 def selectbox():
@@ -232,7 +206,7 @@ def selectbox():
 def setcam(cam):
     """ setcam middle route """
     global data
-    set_current_cam(cam)
+    set_cam(cam)
     data["selected_cam"] = cam
     return redirect(url_for("selectbox"))
 
@@ -240,21 +214,18 @@ def setcam(cam):
 def delta(cam):
     """ delta middle route """
     global data
-    set_current_cam(cam)
+    set_quad_cam(cam)
     data["selected_cam"] = cam
     return render_template("selectdelta.html")
 
 @app.route('/quad', methods=['GET'])
 def quad():
-    global data
-    # print(request.form)
     delay = int(request.args.get("delay"))
     return render_template("four_cams.html", delay=delay)
 
 @app.route('/stream-dual-delay', methods=['GET'])
 def stream_dual_delay():
     global data
-    # print(request.form)
     delay = int(request.args.get("delay"))
     return render_template("dual_delay.html", delay=delay)
 
@@ -271,8 +242,6 @@ def choosecam(cam_nr):
         data["camera_object"] = VideoCamera(list_of_cam_objects[cam_nr-1].fulladress)
         return render_template("index.html", data=list_of_cam_objects, menu=3)
 
-    # option = int(request.args.get("option"))
-
     return render_template("index.html", data=list_of_cam_objects, menu=2)
 
 
@@ -288,6 +257,8 @@ def select_dual_cam(left, right):
 @app.route("/select-dual-cams-delay/<int:left>/<int:right>")
 def select_dual_cam_delay(left, right):
     """ select_dual_cam_delay route """
+    set_cam(left)
+    set_cam(right)
     left = list_of_cam_objects[left-1].fulladress
     right = list_of_cam_objects[right-1].fulladress
 
@@ -295,8 +266,7 @@ def select_dual_cam_delay(left, right):
 
 @app.route('/delaystream/<int:delay>')
 def delaystream(delay):
-    # set_current_cam(cam)
-    return Response(gen(delay), mimetype='multipart/x-mixed-replace; boundary=frame')
+    return Response(gen(delay, ), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 @app.route('/delaystream2/<int:delay>')
 def delaystream2(delay):
@@ -314,7 +284,7 @@ def delaystream4(delay):
 @app.route('/stream', methods=['GET'])
 def stream():
     global data
-    # print(request.form)
+
     delay = int(request.args.get("delay"))
     temp_delay = -1
     if temp_delay != delay:
@@ -327,7 +297,6 @@ def stream():
 
 @app.route('/fourcams')
 def fourcams():
-    # print(request.form)
 
     return render_template("four_cams.html", delay=2)
 
@@ -336,7 +305,7 @@ def fourcams():
 @app.route("/selectcam/<int:cam_nr>")
 def selectcam(cam_nr):
     """ sel route """
-    set_current_cam(cam_nr)
+    set_cam(cam_nr)
     print("Cam number: {}".format(cam_nr))
 
     return redirect(url_for("stream", delay=0))
