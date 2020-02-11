@@ -1,6 +1,8 @@
 (function() {
     "use strict";
-
+    document.addEventListener("DOMContentLoaded", function(event) {
+        document.documentElement.webkitRequestFullscreen();
+    });
     document.addEventListener("keydown", function(event) {
         let key = event.key;
 

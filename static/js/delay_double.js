@@ -7,7 +7,9 @@
 
     camSelection.innerHTML = "<h3>Choose 2 cameras, then press Enter</h3>";
     document.getElementsByClassName("lists")[0].appendChild(camSelection);
-
+    document.addEventListener("DOMContentLoaded", function(event) {
+        document.documentElement.webkitRequestFullscreen();
+    });
     document.addEventListener("keydown", function(event) {
         // event.preventDefault();
         let key = event.key;

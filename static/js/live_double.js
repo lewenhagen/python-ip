@@ -1,6 +1,8 @@
 (function() {
     "use strict";
-
+    document.addEventListener("DOMContentLoaded", function(event) {
+        document.documentElement.webkitRequestFullscreen();
+    });
     let selectedCams = [];
     let camSelection = document.createElement("div");
     let selected = document.getElementsByClassName("selected");

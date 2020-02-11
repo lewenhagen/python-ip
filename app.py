@@ -271,7 +271,7 @@ def select_dual_cam_delay(left, right):
 
 @app.route('/delaystream/<int:delay>')
 def delaystream(delay):
-    return Response(gen(delay, ), mimetype='multipart/x-mixed-replace; boundary=frame')
+    return Response(gen(delay), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 @app.route('/delaystream2/<int:delay>')
 def delaystream2(delay):

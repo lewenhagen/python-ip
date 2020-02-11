@@ -9,10 +9,6 @@
     <link rel="stylesheet" href="{{ url_for('static',filename='styles/style.css') }}">
 </head>
 <body>
-    <audio autoplay>
-        <source src="{{ url_for('static',filename='sound/01_Press_Start.mp3') }}" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
 
     <div class="container">
         <div class="logo">
@@ -23,16 +19,39 @@
             </div>
         </div>
     </div>
+    <audio autoplay>
+        <source src="{{ url_for('static',filename='sound/pressstart.ogg') }}" type="audio/ogg">
+            Your browser does not support the audio element.
+        </audio>
     <script>
+        // document.addEventListener("DOMContentLoaded", function(event) {
+        //     document.documentElement.webkitRequestFullscreen();
+        // });
         let separation = window.setTimeout(function() {
             document.getElementsByClassName("logotext")[0].style.visibility = "visible";
             document.getElementsByClassName("logotext")[0].style.webkitAnimationName = "fadein";
-            document.getElementsByClassName("logotext")[0].style.webkitAnimationDuration = "3s";
+            document.getElementsByClassName("logotext")[0].style.webkitAnimationDuration = "4s";
 
-        }, 4000)
+        }, 2000)
         let timer = window.setTimeout(function() {
             window.location.replace(`/`);
         }, 8000)
+
+        document.addEventListener("keydown", function(event) {
+            let key = event.key;
+            console.log(event);
+            switch(key) {
+                case "+":
+                    document.documentElement.webkitRequestFullscreen();
+                    break;
+                case "-":
+                    document.webkitExitFullscreen();
+                    break;
+                case "default":
+                    break;
+
+            }
+        })
     </script>
 </body>
 <footer></footer>
