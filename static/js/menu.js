@@ -12,6 +12,9 @@
             case "5":
                 window.location.replace(`/${key}`);
                 break;
+            case "9":
+                window.location.replace(`/splashscreen`);
+                break;
             case "0":
                 window.location.replace("/0");
                 break;

@@ -28,10 +28,8 @@ body {
 
 
 
-.lists {
-    /* width: 800px;
-    margin: 0 auto;
-    text-align: left; */
+.lists > h1 {
+    text-align: center;
 }
 
 .dual {
@@ -43,13 +41,8 @@ body {
     justify-content: space-between;
 }
 .dual > img {
-
-    /* flex: 0 50%;
-    box-sizing:border-box; */
     margin-bottom: 1%;
     width: 49.9%;
-    /* height: 49.5%; */
-
 }
 
 .multiple {
@@ -112,4 +105,37 @@ body {
 
 ul {
     list-style-type: none;
+}
+
+.small_logo {
+    margin: 2em;
+    width: 300px;
+    float: left;
+}
+
+.logo {
+    margin: 0 auto;
+    text-align: center;
+}
+.logo img {
+    width: 500px;
+    -webkit-animation: fadein 3s;
+}
+
+.logotext {
+    visibility: hidden;
+    /*-webkit-animation: fadein 8s;*/
+}
+
+#logo_title {
+    font-size: 50px;
+}
+
+#logo_text {
+    font-size: 50px;
+}
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
 }

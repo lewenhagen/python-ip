@@ -195,6 +195,11 @@ def main(menu_nr):
     return render_template("index.html", menu=menu[menu_nr], choices=choices)
 
 
+@app.route("/splashscreen")
+def splashscreen():
+    """ splashscreen middle route """
+
+    return render_template("splashscreen.html")
 
 @app.route("/selectbox")
 def selectbox():
