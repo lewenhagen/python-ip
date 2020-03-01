@@ -15,10 +15,7 @@ import functions as func
 
 list_of_cameras = [
 "http://192.168.1.133",
-"http://192.168.1.133",
-"http://192.168.1.133",
-"http://192.168.1.133"
-
+"http://192.168.1.158"
 ]
 
 menu = [
@@ -295,7 +292,8 @@ def stream():
     if temp_delay != delay:
         temp_delay = delay
     if delay == 0:
-        return render_template("one_cam.html", data=list_of_cam_objects[data["selected_cam"]-1].fulladress)
+        return render_template("one_cam.html", data=list_of_cam_objects[data["selected_cam"]].fulladress)
+        #list_of_cam_objects[data["selected_cam"]-1].fulladress)
     else:
         print("delay: {}".format(temp_delay))
         return render_template("cam.html", delay=temp_delay)
@@ -311,6 +309,7 @@ def fourcams():
 def selectcam(cam_nr):
     """ sel route """
     set_cam(cam_nr)
+    data["selected_cam"] = cam_nr-1
     print("Cam number: {}".format(cam_nr))
 
     return redirect(url_for("stream", delay=0))
