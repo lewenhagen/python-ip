@@ -12,6 +12,8 @@ from videocamera import VideoCamera
 import cv2 as cv
 from cam import Cam
 import functions as func
+import signal
+import sys
 
 list_of_cameras = [
 "http://192.168.1.133",
@@ -86,11 +88,14 @@ def set_cam(cam):
 
 def set_quad_cam(cam):
     global data
+    chosenquadcam = int(cam)
+    if chosenquadcam > len(list_of_cam_objects):
+        chosenquadcam = list_of_cam_objects[0]
 
-    data["cameras"].append(VideoCamera(list_of_cam_objects[int(cam)-1].fulladress))
-    data["cameras"].append(VideoCamera(list_of_cam_objects[int(cam)-1].fulladress))
-    data["cameras"].append(VideoCamera(list_of_cam_objects[int(cam)-1].fulladress))
-    data["cameras"].append(VideoCamera(list_of_cam_objects[int(cam)-1].fulladress))
+    data["cameras"].append(VideoCamera(list_of_cam_objects[chosenquadcam-1].fulladress))
+    data["cameras"].append(VideoCamera(list_of_cam_objects[chosenquadcam-1].fulladress))
+    data["cameras"].append(VideoCamera(list_of_cam_objects[chosenquadcam-1].fulladress))
+    data["cameras"].append(VideoCamera(list_of_cam_objects[chosenquadcam-1].fulladress))
 
 
 def gen(delay):
@@ -216,6 +221,8 @@ def setcam(cam):
 def delta(cam):
     """ delta middle route """
     global data
+    if int(cam) > len(list_of_cam_objects):
+        cam = 0
     set_quad_cam(cam)
     data["selected_cam"] = cam
     return render_template("selectdelta.html")
@@ -333,5 +340,6 @@ def internal_server_error(e):
     import traceback
     return "<p>Flask 500<pre>" + traceback.format_exc()
 
+
 if __name__ == "__main__":
-    app.run(debug=True, threaded=True)
+    app.run(threaded=True)

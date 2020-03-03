@@ -32,8 +32,7 @@ body {
     text-align: center;
 }
 
-.dual {
-
+/* .dual {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
@@ -43,6 +42,22 @@ body {
 .dual > img {
     margin-bottom: 1%;
     width: 49.9%;
+
+} */
+.dual {
+    height: 100%;
+    width: 50%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    overflow-x: hidden;
+}
+.dualleft {
+    left: 0;
+}
+
+.dualright {
+    right: 0;
 }
 
 .multiple {
