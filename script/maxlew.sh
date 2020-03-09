@@ -18,8 +18,8 @@ cd ~/git/priv/python-ip && python3 app.py &
 
 sleep 3
 
-google-chrome "http://localhost:5000/splashscreen" &
+google-chrome --app="http://localhost:5000/splashscreen" &
 
-sleep 0.5
+sleep 1
 
 xdotool key F11
