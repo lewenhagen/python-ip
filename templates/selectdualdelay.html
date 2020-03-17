@@ -4,7 +4,7 @@
     <div class="nes-container is-rounded" style="margin: 0 auto;">
 
         <form class="selectform" method="GET" action="/stream-dual-delay">
-            <label for="default_select">Välj delay för "right" (sekunder)</label>
+            <label for="default_select">Välj delay (sekunder)</label>
             <div class="nes-select">
                 <select name="delay" required id="default_select" autofocus onchange="this.form.submit()">
                     <option value="" disabled selected hidden>Välj...</option>
@@ -24,13 +24,13 @@
     </div>
 </div>
 
-<script src="{{ url_for('static',filename='js/menu.js') }}"></script>
-<script>
+<!-- <script src="{{ url_for('static',filename='js/menu.js') }}"></script> -->
+<!-- <script>
     document.addEventListener("keydown", function(event) {
         if (event.key === "ArrowUp" || event.key === "ArrowDown") {
             event.preventDefault();
         }
     })
-</script>
+</script> -->
 
 {% include 'footer.html' %}

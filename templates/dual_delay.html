@@ -1,7 +1,7 @@
 {% include 'header.html' %}
 <div class="container">
     <div class="">
-        <img class="dual dualleft" id="camera" src="{{ url_for('delaystream', delay=0) }}" alt="videostream">
+        <img class="dual dualleft" id="camera" src="{{ url_for('delaystream', delay=delay) }}" alt="videostream">
 
         <img class="dual dualright" id="camera" src="{{ url_for('delaystream2', delay=delay) }}" alt="videostream">
 

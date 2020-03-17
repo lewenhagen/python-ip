@@ -12,7 +12,11 @@ sleep 10
 #
 oldport=$(lsof -i :5000 | cut -d" " -f2 | tail -n1)
 
-kill $oldport && echo "Old stuff killed." || echo "No port in use..."
+if [ -z "$oldport" ]; then
+    echo "No port in use..."
+else
+    kill $oldport && echo "Old stuff killed."
+fi
 
 cd ~/git/priv/python-ip && python3 app.py &
 

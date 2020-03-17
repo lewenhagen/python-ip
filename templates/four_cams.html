@@ -1,13 +1,13 @@
 {% include 'header.html' %}
 <div class="container">
     <div class="multiple">
-        <img id="camera" src="{{ url_for('delaystream', delay=0) }}" alt="videostream">
+        <img id="camera" src="{{ url_for('delaystream', delay=delay) }}" alt="videostream">
 
-        <img id="camera" src="{{ url_for('delaystream2', delay=delay) }}" alt="videostream">
+        <img id="camera" src="{{ url_for('delaystream3', delay=delay+5) }}" alt="videostream">
+        <img id="camera" src="{{ url_for('delaystream4', delay=delay+10) }}" alt="videostream">
+        <img id="camera" src="{{ url_for('delaystream2', delay=delay+15) }}" alt="videostream">
 
-        <img id="camera" src="{{ url_for('delaystream3', delay=delay*2) }}" alt="videostream">
 
-        <img id="camera" src="{{ url_for('delaystream4', delay=delay*3) }}" alt="videostream">
 
     </div>
 </div>

@@ -12,13 +12,17 @@ from videocamera import VideoCamera
 import cv2 as cv
 from cam import Cam
 import functions as func
-import signal
-import sys
+# import signal
+# import sys
 
 list_of_cameras = [
-"http://192.168.1.133",
-"http://192.168.1.158"
+    ["Hopp", "http://192.168.1.133"],
+    ["Studs", "http://192.168.1.158"]
 ]
+
+list_of_cam_objects = {}
+list_of_cam_objects["single"] = func.create_list_of_cam_objects(list_of_cameras, "1280x720")
+list_of_cam_objects["quad"] = func.create_list_of_cam_objects(list_of_cameras, "640x360")
 
 menu = [
     {
@@ -32,31 +36,31 @@ menu = [
         "jsmenu": "menu.js"
     },
     {
-        "choices": list_of_cameras,
+        "choices": [item[0] for item in list_of_cameras],
         "delay": False,
         "double": False,
         "jsmenu": "live_single.js"
     },
     {
-        "choices": list_of_cameras,
+        "choices": [item[0] for item in list_of_cameras],
         "delay": False,
         "double": True,
         "jsmenu": "live_double.js"
     },
     {
-        "choices": list_of_cameras,
+        "choices": [item[0] for item in list_of_cameras],
         "delay": True,
         "double": False,
         "jsmenu": "delay_single.js"
     },
     {
-        "choices": list_of_cameras,
+        "choices": [item[0] for item in list_of_cameras],
         "delay": True,
         "quad": True,
         "jsmenu": "delay_single_quad.js"
     },
     {
-        "choices": list_of_cameras,
+        "choices": [item[0] for item in list_of_cameras],
         "delay": True,
         "double": True,
         "jsmenu": "delay_double.js"
@@ -78,24 +82,23 @@ data = {
 }
 
 
-list_of_cam_objects = func.create_list_of_cam_objects(list_of_cameras)
 
 
 def set_cam(cam):
     global data
 
-    data["cameras"].append(VideoCamera(list_of_cam_objects[int(cam)-1].fulladress))
+    data["cameras"].append(VideoCamera(list_of_cam_objects["single"][int(cam)-1].fulladress))
 
 def set_quad_cam(cam):
     global data
     chosenquadcam = int(cam)
-    if chosenquadcam > len(list_of_cam_objects):
-        chosenquadcam = list_of_cam_objects[0]
+    if chosenquadcam > len(list_of_cam_objects["quad"]):
+        chosenquadcam = list_of_cam_objects["quad"][0]
 
-    data["cameras"].append(VideoCamera(list_of_cam_objects[chosenquadcam-1].fulladress))
-    data["cameras"].append(VideoCamera(list_of_cam_objects[chosenquadcam-1].fulladress))
-    data["cameras"].append(VideoCamera(list_of_cam_objects[chosenquadcam-1].fulladress))
-    data["cameras"].append(VideoCamera(list_of_cam_objects[chosenquadcam-1].fulladress))
+    data["cameras"].append(VideoCamera(list_of_cam_objects["quad"][chosenquadcam-1].fulladress))
+    data["cameras"].append(VideoCamera(list_of_cam_objects["quad"][chosenquadcam-1].fulladress))
+    data["cameras"].append(VideoCamera(list_of_cam_objects["quad"][chosenquadcam-1].fulladress))
+    data["cameras"].append(VideoCamera(list_of_cam_objects["quad"][chosenquadcam-1].fulladress))
 
 
 def gen(delay):
@@ -105,17 +108,21 @@ def gen(delay):
     counter = 0
     frames = []
     while True:
-        frames.append(data["cameras"][0].get_frame())
-        counter+=1
-        if len(frames) >= (int(delay)*25):
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frames.pop(0) + b'\r\n\r\n')
-        else:
-            if len(frames) > 0:
+        try:
+            frames.append(data["cameras"][0].get_frame())
+            counter+=1
+            if len(frames) >= (int(delay)*25):
                 yield (b'--frame\r\n'
-                    b'Content-Type: image/jpeg\r\n\r\n' + frames[0] + b'\r\n\r\n')
-
-    data["cameras"][0].release_cam()
+                       b'Content-Type: image/jpeg\r\n\r\n' + frames.pop(0) + b'\r\n\r\n')
+            else:
+                if len(frames) > 0:
+                    yield (b'--frame\r\n'
+                        b'Content-Type: image/jpeg\r\n\r\n' + frames[0] + b'\r\n\r\n')
+        except:
+            print("Gen 1 done.")
+            break
+    if len(data["cameras"]) > 0:
+        data["cameras"][0].release_cam()
 
 def gen2(delay):
     # global thecam2
@@ -124,17 +131,22 @@ def gen2(delay):
     counter2 = 0
     frames2 = []
     while True:
-        frames2.append(data["cameras"][1].get_frame())
-        counter2+=1
-        if len(frames2) >= (int(delay)*25):
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frames2.pop(0) + b'\r\n\r\n')
-        else:
-            if len(frames2) > 0:
+        try:
+            frames2.append(data["cameras"][1].get_frame())
+            counter2+=1
+            if len(frames2) >= (int(delay)*25):
                 yield (b'--frame\r\n'
-                    b'Content-Type: image/jpeg\r\n\r\n' + frames2[0] + b'\r\n\r\n')
+                       b'Content-Type: image/jpeg\r\n\r\n' + frames2.pop(0) + b'\r\n\r\n')
+            else:
+                if len(frames2) > 0:
+                    yield (b'--frame\r\n'
+                        b'Content-Type: image/jpeg\r\n\r\n' + frames2[0] + b'\r\n\r\n')
+        except:
+            print("Gen 2 done.")
+            break
 
-    data["cameras"][1].release_cam()
+    if len(data["cameras"]) > 0:
+        data["cameras"][1].release_cam()
 
 def gen3(delay):
     # global thecam3
@@ -143,17 +155,21 @@ def gen3(delay):
     counter3 = 0
     frames3 = []
     while True:
-        frames3.append(data["cameras"][2].get_frame())
-        counter3+=1
-        if len(frames3) >= (int(delay)*25):
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frames3.pop(0) + b'\r\n\r\n')
-        else:
-            if len(frames3) > 0:
+        try:
+            frames3.append(data["cameras"][2].get_frame())
+            counter3+=1
+            if len(frames3) >= (int(delay)*25):
                 yield (b'--frame\r\n'
-                    b'Content-Type: image/jpeg\r\n\r\n' + frames3[0] + b'\r\n\r\n')
-
-    data["cameras"][2].release_cam()
+                       b'Content-Type: image/jpeg\r\n\r\n' + frames3.pop(0) + b'\r\n\r\n')
+            else:
+                if len(frames3) > 0:
+                    yield (b'--frame\r\n'
+                        b'Content-Type: image/jpeg\r\n\r\n' + frames3[0] + b'\r\n\r\n')
+        except:
+            print("Gen 3 done.")
+            break
+    if len(data["cameras"]) > 0:
+        data["cameras"][2].release_cam()
 
 def gen4(delay):
     # global thecam4
@@ -162,17 +178,21 @@ def gen4(delay):
     counter4 = 0
     frames4 = []
     while True:
-        frames4.append(data["cameras"][3].get_frame())
-        counter4+=1
-        if len(frames4) >= (int(delay)*25):
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frames4.pop(0) + b'\r\n\r\n')
-        else:
-            if len(frames4) > 0:
+        try:
+            frames4.append(data["cameras"][3].get_frame())
+            counter4+=1
+            if len(frames4) >= (int(delay)*25):
                 yield (b'--frame\r\n'
-                    b'Content-Type: image/jpeg\r\n\r\n' + frames4[0] + b'\r\n\r\n')
-
-    data["cameras"][3].release_cam()
+                       b'Content-Type: image/jpeg\r\n\r\n' + frames4.pop(0) + b'\r\n\r\n')
+            else:
+                if len(frames4) > 0:
+                    yield (b'--frame\r\n'
+                        b'Content-Type: image/jpeg\r\n\r\n' + frames4[0] + b'\r\n\r\n')
+        except:
+            print("Gen 4 done.")
+            break
+    if len(data["cameras"]) > 0:
+        data["cameras"][3].release_cam()
 
 app = Flask(__name__)
 
@@ -189,7 +209,13 @@ def main(menu_nr):
 
     else:
         choices["choice"] = "Menu"
+        # try:
+        #     for index, cam in enumerate(data["cameras"]):
+        #         cam.release_cam()
+        #         print("Cam #{} released.".format(index+1))
         data["cameras"] = []
+        # except:
+        #     print("All cams already released.")
 
     # if len(frames) > 0:
         # frames = []
@@ -209,6 +235,7 @@ def selectbox():
 
     return render_template("selectbox.html")
 
+# USED BY: Single cam delay
 @app.route("/setcam/<int:cam>")
 def setcam(cam):
     """ setcam middle route """
@@ -221,7 +248,7 @@ def setcam(cam):
 def delta(cam):
     """ delta middle route """
     global data
-    if int(cam) > len(list_of_cam_objects):
+    if int(cam) > len(list_of_cam_objects["single"]):
         cam = 0
     set_quad_cam(cam)
     data["selected_cam"] = cam
@@ -248,18 +275,18 @@ def choosecam(cam_nr):
 
     if cam_nr > 0:
         data["selected_cam"] = cam_nr
-        data["camera_object"] = VideoCamera(list_of_cam_objects[cam_nr-1].fulladress)
-        return render_template("index.html", data=list_of_cam_objects, menu=3)
+        data["camera_object"] = VideoCamera(list_of_cam_objects["single"][cam_nr-1].fulladress)
+        return render_template("index.html", data=list_of_cam_objects["single"], menu=3)
 
-    return render_template("index.html", data=list_of_cam_objects, menu=2)
+    return render_template("index.html", data=list_of_cam_objects["single"], menu=2)
 
 
-
+# FIX: resolution on cams
 @app.route("/select-dual-cams/<int:left>/<int:right>")
 def select_dual_cam(left, right):
     """ select_dual_cam route """
-    left = list_of_cam_objects[left-1].fulladress
-    right = list_of_cam_objects[right-1].fulladress
+    left = list_of_cam_objects["single"][left-1].fulladress
+    right = list_of_cam_objects["single"][right-1].fulladress
 
     return render_template("dual.html", left=left, right=right)
 
@@ -268,8 +295,8 @@ def select_dual_cam_delay(left, right):
     """ select_dual_cam_delay route """
     set_cam(left)
     set_cam(right)
-    left = list_of_cam_objects[left-1].fulladress
-    right = list_of_cam_objects[right-1].fulladress
+    left = list_of_cam_objects["single"][left-1].fulladress
+    right = list_of_cam_objects["single"][right-1].fulladress
 
     return render_template("selectdualdelay.html", left=left, right=right)
 
@@ -299,16 +326,16 @@ def stream():
     if temp_delay != delay:
         temp_delay = delay
     if delay == 0:
-        return render_template("one_cam.html", data=list_of_cam_objects[data["selected_cam"]].fulladress)
+        return render_template("one_cam.html", data=list_of_cam_objects["single"][data["selected_cam"]].fulladress)
         #list_of_cam_objects[data["selected_cam"]-1].fulladress)
     else:
         print("delay: {}".format(temp_delay))
         return render_template("cam.html", delay=temp_delay)
 
-@app.route('/fourcams')
-def fourcams():
-
-    return render_template("four_cams.html", delay=2)
+# @app.route('/fourcams')
+# def fourcams():
+#
+#     return render_template("four_cams.html", delay=2)
 
 
 @app.route("/selectcam/", defaults={'cam_nr': 0})
@@ -342,4 +369,6 @@ def internal_server_error(e):
 
 
 if __name__ == "__main__":
-    app.run(threaded=True)
+    from waitress import serve
+    serve(app, host="0.0.0.0", port=5000, threads=8)
+    # app.run(threaded=True)
