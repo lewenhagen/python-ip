@@ -12,6 +12,7 @@ from videocamera import VideoCamera
 import cv2 as cv
 from cam import Cam
 import functions as func
+import gc
 # import signal
 # import sys
 
@@ -203,6 +204,12 @@ def main(menu_nr):
     # global frames
     global menu
     global choices
+
+    try:
+        gc.collect()
+        print("Freeing some memory")
+    except:
+        print("No memory to set free...")
 
     if menu_nr > 0:
         choices["choice"] = menu[0]["choices"][menu_nr-1]
