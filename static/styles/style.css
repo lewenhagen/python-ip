@@ -32,29 +32,28 @@ body {
     text-align: center;
 }
 
-/* .dual > img {
-    margin-bottom: 1%;
-    width:50%;
-} */
-div > .dual {
-    overflow: hidden;
-}
+
 .dual {
     height: 100%;
     width: 50%;
     position: fixed;
-    /* z-index: 1; */
+    z-index: 1;
     top: 0;
-    /* display: block; */
-
+    overflow-x: hidden;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
 }
 
 
-.dualleft {
+
+.left {
     left: 0;
+    object-fit: cover;
 }
 
-.dualright {
+.right {
+    object-fit: cover;
     right: 0;
 }
 
@@ -73,28 +72,19 @@ div > .dual {
     width: 50%;
     height: 50%;
 }
-.fullscreen {
-    /* width: 100%;
-    height: 100%; */
 
-    /* justify-content: space-between; */
-}
-
-.fourcams {
-
-}
 
 .selected {
     background-color: green;
 }
 
-.left:after {
+/* .left:after {
     content: "(LEFT)";
 }
 
 .right:after {
     content: "(RIGHT)";
-}
+} */
 
 .flash {
     animation: glow 1s alternate;

@@ -262,6 +262,9 @@ def quad():
 @app.route('/stream-dual-delay', methods=['GET'])
 def stream_dual_delay():
     global data
+    left_nr = list_of_cameras[0][0]
+    right_nr = list_of_cameras[1][0]
+
     delay = int(request.args.get("delay"))
     return render_template("dual_delay.html", delay=delay)
 
@@ -285,10 +288,12 @@ def choosecam(cam_nr):
 @app.route("/select-dual-cams/<int:left>/<int:right>")
 def select_dual_cam(left, right):
     """ select_dual_cam route """
+    left_nr = left
+    right_nr = right
     left = list_of_cam_objects["single"][left-1].fulladress
     right = list_of_cam_objects["single"][right-1].fulladress
 
-    return render_template("dual.html", left=left, right=right)
+    return render_template("dual.html", left=left, right=right, ll=list_of_cameras[left_nr-1][0], rr=list_of_cameras[right_nr-1][0])
 
 @app.route("/select-dual-cams-delay/<int:left>/<int:right>")
 def select_dual_cam_delay(left, right):
@@ -342,11 +347,15 @@ def stream():
 @app.route("/selectcam/<int:cam_nr>")
 def selectcam(cam_nr):
     """ sel route """
-    set_cam(cam_nr)
-    data["selected_cam"] = cam_nr-1
-    print("Cam number: {}".format(cam_nr))
+    if cam_nr <= len(list_of_cameras):
+        set_cam(cam_nr)
+        data["selected_cam"] = cam_nr-1
+        print("Cam number: {}".format(cam_nr))
 
-    return redirect(url_for("stream", delay=0))
+        return redirect(url_for("stream", delay=0))
+    else:
+        return redirect(url_for("main"))
+
 
 
 @app.errorhandler(404)

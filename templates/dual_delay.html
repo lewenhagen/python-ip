@@ -1,11 +1,13 @@
 {% include 'header.html' %}
+<style>
+    .dual:after {
+        color: cyan;
+        content: "(delay: {{ delay }}s)";
+    }
+</style>
 <div class="container">
-    <div class="">
-        <img class="dual dualleft" id="camera" src="{{ url_for('delaystream', delay=delay) }}" alt="videostream">
-
-        <img class="dual dualright" id="camera" src="{{ url_for('delaystream2', delay=delay) }}" alt="videostream">
-
-    </div>
+    <div class="dual left" style="background-image:url({{ url_for('delaystream', delay=delay) }});"></div>
+    <div class="dual right" style="background-image:url({{ url_for('delaystream2', delay=delay) }});"></div>
 </div>
 
 <script src="{{ url_for('static',filename='js/menu.js') }}"></script>

@@ -1,9 +1,23 @@
 {% include 'header.html' %}
+
+<style>
+    .dual {
+        color: cyan;
+    }
+    .left:after {
+        content: "(Cam: {{ ll }})";
+    }
+    .right:after {
+        content: "(Cam: {{ rr }})";
+    }
+</style>
+
 <div class="container">
-    <div class="">
-        <img class="dual dualleft" src="{{ left }}">
-        <img class="dual dualright" src="{{ right }}">
-    </div>
+    <div class="dual left" style="background-image:url({{ left }});"></div>
+    <div class="dual right" style="background-image:url({{ right }});"></div>
+    <!-- <div class="dual">
+        <img class="dualright" src="{{ right }}">
+    </div> -->
 </div>
 
 <script src="{{ url_for('static',filename='js/menu.js') }}"></script>
